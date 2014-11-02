@@ -11,20 +11,22 @@
 |
 */
 
-Route::group([
-    'before' => 'auth'
-], function () {
-    Route::get('/', 'AlbumController@index');
-});
-
-Route::get('users/logout', [
-    'as' => 'users.logout',
-    'uses' => 'AuthController@logout'
-]);
 Route::any('users/login', [
     'as' => 'users.login',
     'uses' => 'AuthController@login'
 ]);
-Route::resource('users', 'AuthController', ['only' => ['create', 'store']]);
-Route::resource('albums.photos', 'PhotoController');
-Route::resource('albums', 'AlbumController');
+
+Route::group([
+    'before' => 'auth'
+], function () {
+    Route::get('/', 'AlbumController@index');
+
+    Route::get('users/logout', [
+        'as' => 'users.logout',
+        'uses' => 'AuthController@logout'
+    ]);
+
+    Route::resource('users', 'AuthController', ['only' => ['create', 'store']]);
+    Route::resource('albums.photos', 'PhotoController');
+    Route::resource('albums', 'AlbumController');
+});

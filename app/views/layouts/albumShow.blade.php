@@ -62,7 +62,7 @@
                 maxHeight: '95%'
             });
 
-            $('#navbar-create-album').colorbox({
+            $('.navbar-create-album').colorbox({
                 closeButton: false,
                 width: 500,
                 maxWidth: '95%'

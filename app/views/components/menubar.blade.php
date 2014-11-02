@@ -15,7 +15,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a id="navbar-create-album" href="{{ URL::route('albums.create') }}"><i class="fa fa-plus"></i> Album</a></li>
+                <li><a class="navbar-create-album" href="{{ URL::route('albums.create') }}"><i class="fa fa-plus"></i> Album</a></li>
                 @if (!empty($album))
                     <li><a class="btn-add-photo" href="{{ URL::route('albums.photos.create', [$album->getKey()]) }}"><i class="fa fa-plus"></i> Photos</a></li>
                 @endif

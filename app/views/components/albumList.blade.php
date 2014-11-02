@@ -21,3 +21,11 @@
     @endif
 @endforeach
 </div>
+
+@if (!empty($albums))
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            {{ $albums->links() }}
+        </div>
+    </div>
+@endif
