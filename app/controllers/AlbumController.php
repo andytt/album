@@ -11,7 +11,7 @@ class AlbumController extends \BaseController {
     {
         $query = Album::query();
         $query->where('user_id', Auth::user()->getKey());
-        $albums = $query->get();
+        $albums = $query->paginate();
 
         return View::make('layouts.index')->with(compact('albums'));
     }
@@ -77,7 +77,7 @@ class AlbumController extends \BaseController {
             return Redirect::route('albums.create');
         }
 
-        $photos = $album->photos;
+        $photos = $album->photos()->paginate();
 
         return View::make('layouts.albumShow')->with(compact('album', 'photos'));
     }
