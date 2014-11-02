@@ -70,7 +70,10 @@ class AlbumController extends \BaseController {
     {
         $album = Album::find($id);
 
-        if (empty($album)) {
+        if (
+            empty($album)
+            || $album->getAttribute('user_id') !== Auth::user()->getKey()
+        ) {
             return Redirect::route('albums.create');
         }
 
