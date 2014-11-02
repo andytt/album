@@ -30,9 +30,15 @@
 
 <div id="container">
     <div id="album-show-container">
-        <div class="col-md-12">
-            @include('components.albumList')
-        </div>
+        @if (!$albums->isEmpty())
+            <div class="col-md-12">
+                @include('components.albumList')
+            </div>
+        @else
+            <div class="text-center h4">
+                Hey, let's <a class="navbar-create-album" href="{{ URL::route('albums.create') }}">create an album</a>!
+            </div>
+        @endif
     </div>
 </div>
 
@@ -43,7 +49,7 @@
 <script>
     (function ($) {
         $(function () {
-            $('#navbar-create-album').colorbox({
+            $('.navbar-create-album').colorbox({
                 closeButton: false,
                 width: 500,
                 maxWidth: '95%'
