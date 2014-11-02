@@ -50,7 +50,9 @@ App::error(function(Exception $exception, $code)
 {
 	Log::error($exception);
 
-    return View::make('layouts.exception');
+    if (!App::isLocal()) {
+        return View::make('layouts.exception');
+    }
 });
 
 /*
