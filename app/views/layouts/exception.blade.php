@@ -36,7 +36,7 @@
 
 <div id="container">
     <div id="exception-container">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-12">
             <h3 class="text-danger text-center">Sorry... Something Wrong</h3>
         </div>
     </div>
