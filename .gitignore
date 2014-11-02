@@ -1,4 +1,5 @@
 /bootstrap/compiled.php
+/app/storage/images
 /vendor
 composer.phar
 composer.lock
