@@ -52,7 +52,7 @@
     @yield('styles', '')
 
 </head>
-<body>
+<body class="container-fluid">
     @yield('body', 'OOPS...')
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
