@@ -43,6 +43,11 @@
             left: 85px;
             color: #444;
         }
+
+        #upload-progress {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
     </style>
     @yield('styles', '')
 

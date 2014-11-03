@@ -4,6 +4,10 @@
     <input type="file" name="files[]" id="photo-upload" multiple>
 </div>
 
+<div class="progress" id="upload-progress">
+    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+</div>
+
 <script>
     (function ($, window) {
         'use strict';
@@ -13,6 +17,11 @@
                 url: '{{ URL::route('albums.photos.store', [$album->getKey()]) }}',
                 dataType: 'JSON',
                 sequentialUploads: true,
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                    $('#upload-progress').find('.progress-bar').css('width', progress + '%').attr('aria-valuenow', progress).html(progress + '%');
+                },
                 stop: function (e, data) {
                     window.location = '{{ URL::route('albums.show', [$album->getKey()]) }}';
                 }
