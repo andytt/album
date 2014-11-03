@@ -3,6 +3,10 @@
 @section('styles')
 
 <style>
+    .container-fluid {
+        padding: 0;
+    }
+
     #container {
         position: relative;
         width: 100%;

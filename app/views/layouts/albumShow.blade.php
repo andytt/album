@@ -28,18 +28,21 @@
 
 @include('components.menubar', compact('album'))
 
-<div id="container">
-    <div id="album-show-container">
-        <div class="col-md-4 col-md-offset-4">
+@if ($photos->isEmpty())
+    <div id="container">
+        <div id="album-show-container" class="text-center">
             @include('components.albumShow')
         </div>
-        <div class="col-md-12">
+    </div>
+@else
+    <div class="row">
+        <div class="col-xs-12">
             @if (!$photos->isEmpty())
                 @include('components.photoList')
             @endif
         </div>
     </div>
-</div>
+@endif
 
 @stop
 

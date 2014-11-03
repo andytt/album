@@ -28,19 +28,19 @@
 
 @include('components.menubar')
 
+@if ($albums->isEmpty())
 <div id="container">
-    <div id="album-show-container">
-        @if (!$albums->isEmpty())
-            <div class="col-md-12">
-                @include('components.albumList')
-            </div>
-        @else
-            <div class="text-center h4">
-                Hey, let's <a class="navbar-create-album" href="{{ URL::route('albums.create') }}">create an album</a>!
-            </div>
-        @endif
+    <div id="album-show-container" class="text-center">
+        <h4> Hey, let's <a class="navbar-create-album" href="{{ URL::route('albums.create') }}">create an album</a>!</h4>
     </div>
 </div>
+@else
+    <div class="row">
+        <div class="col-xs-12">
+            @include('components.albumList')
+        </div>
+    </div>
+@endif
 
 @stop
 
