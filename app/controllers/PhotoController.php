@@ -58,7 +58,7 @@ class PhotoController extends \BaseController {
         foreach (Input::file('files') as $file) {
             $newFilename = mt_rand();
 
-            if ($file->move(storage_path('images'), $newFilename)) {
+            if (Image::make($file->getRealPath())->save(storage_path('images') . '/' . $newFilename, 100)) {
                 Photo::create([
                     'album_id' => $album->getKey(),
                     'file_id' => $newFilename
