@@ -36,7 +36,10 @@
 
 <div id="container">
     <div id="exception-container">
-        <div class="col-md-12">
+        <div class="col-xs-12 text-center">
+            <h1 id="title-banner">Gallery</h1>
+        </div>
+        <div class="col-xs-12 col-md-12">
             <h3 class="text-danger text-center">Sorry... Something Wrong</h3>
         </div>
     </div>

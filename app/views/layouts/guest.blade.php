@@ -36,7 +36,10 @@
 
 <div id="container">
     <div id="form-signup-container">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-xs-12 text-center">
+            <h1 id="title-banner">Gallery</h1>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-offset-4">
             @if (strpos(Route::currentRouteAction(), 'create') !== false)
                 @include('components.signup')
             @else
