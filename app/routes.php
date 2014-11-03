@@ -16,10 +16,7 @@ Route::any('users/login', [
     'uses' => 'AuthController@login'
 ]);
 
-Route::any('users/create', [
-    'as' => 'users.create',
-    'uses' => 'AuthController@create'
-]);
+Route::resource('users', 'AuthController', ['only' => ['create', 'store']]);
 
 Route::group([
     'before' => 'auth'
@@ -31,7 +28,6 @@ Route::group([
         'uses' => 'AuthController@logout'
     ]);
 
-    Route::resource('users', 'AuthController', ['only' => ['store']]);
     Route::resource('albums.photos', 'PhotoController');
     Route::resource('albums', 'AlbumController');
 });
