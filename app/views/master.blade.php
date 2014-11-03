@@ -9,12 +9,18 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/example4/colorbox.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet' type='text/css'>
     <link href='//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/css/jquery.fileupload.min.css' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
     <style>
         html, body {
             font-family: 'PT Mono', Arial, serif;
             width: 100%;
             height: 100%;
+        }
+
+        #title-banner {
+            font-family: 'Lobster', Arial, serif;
+            font-size: 100px;
         }
 
         #cboxCurrent {
