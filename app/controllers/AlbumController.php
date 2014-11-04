@@ -118,5 +118,42 @@ class AlbumController extends \BaseController {
         //
     }
 
+    public function togglePublic($albumId)
+    {
+        $album = Album::find($albumId);
+        $user = Auth::user();
 
+        if (
+            empty($album)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Response::json(null, 403);
+        }
+
+        $public = $album->getAttribute('public');
+        $album->setAttribute('public', !(boolean) $public);
+
+        if ($album->save()) {
+            return Response::json(null);
+        }
+
+        return Response::json(null, 500);
+    }
+
+    public function albumSettings($albumId)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
+
+        $album = Album::find($albumId);
+        $user = Auth::user();
+
+        if (
+            empty($album)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Response::json(null, 403);
+        }
+
+        return View::make('components.albumSettings')->with(compact('album'));
+    }
 }

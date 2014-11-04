@@ -47,15 +47,34 @@
 @section('scripts')
 
 <script>
-    (function ($) {
+    (function ($, document) {
         $(function () {
             $('.navbar-create-album').colorbox({
                 closeButton: false,
                 width: 500,
                 maxWidth: '95%'
             });
+
+            $('.album-navicon').colorbox({
+                closeButton: false,
+                width: 500,
+                maxWidth: '95%'
+            });
+
+            $(document).on('click', '.toggle-privacy', function (e) {
+                e.preventDefault();
+                var $this = $(this);
+
+                $.getJSON(this.href, {}, function () {
+                    if ($this.find('i').hasClass('fa-check')) {
+                        $this.html('<i class="fa fa-ban text-danger"></i>&nbsp;Private');
+                    } else {
+                        $this.html('<i class="fa fa-check text-success"></i>&nbsp;Public');
+                    }
+                });
+            });
         });
-    })(window.jQuery);
+    })(window.jQuery, document);
 </script>
 
 @stop
