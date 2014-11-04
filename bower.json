@@ -1,0 +1,11 @@
+{
+  "name": "laravel-gallery",
+  "dependencies": {
+    "components-font-awesome": "~4.2.0",
+    "bootstrap": "~3.3.0",
+    "jquery-colorbox": "~1.5.14",
+    "blueimp-file-upload": "~9.8.0",
+    "jquery-ui": "~1.11.2",
+    "holderjs": "~2.4.1"
+  }
+}
