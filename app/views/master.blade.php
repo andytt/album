@@ -1,15 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Gallery</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/example4/colorbox.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet' type='text/css'>
-    <link href='//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/css/jquery.fileupload.min.css' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Mono">
+
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/components-font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/jquery-colorbox/example4/colorbox.css">
+    <link rel="stylesheet" href="/vendor/blueimp-file-upload/css/jquery.fileupload.css">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -55,13 +59,13 @@
 <body class="container-fluid">
     @yield('body', 'OOPS...')
 
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.4.1/holder.js"></script>
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/vendor/jquery-ui/ui/widget.js"></script>
+    <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/vendor/jquery-colorbox/jquery.colorbox-min.js"></script>
+    <script src="/vendor/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+    <script src="/vendor/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script src="/vendor/holderjs/holder.js"></script>
 
     @yield('scripts', '')
 </body>
