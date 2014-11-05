@@ -78,6 +78,10 @@
             });
 
             $(document)
+            .on('click', '.photo-url', function (e) {
+                e.preventDefault();
+                $(this).select();
+            })
             .on('click', '.delete-photo', function (e) {
                 e.preventDefault();
                 var url = this.href,

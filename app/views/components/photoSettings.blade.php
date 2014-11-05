@@ -1,5 +1,14 @@
 <div class="container-fluid">
     <div class="col-xs-12 text-center">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="fa fa-share-alt"></i>
+            </span>
+            <input type="text" class="form-control photo-url" value="{{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}}">
+        </div>
+    </div>
+    <div class="col-xs-12"><hr /></div>
+    <div class="col-xs-12 text-center">
         <form role="form" method="POST" action="{{ URL::route('albums.photos.update', [$album->getKey(), $photo->getKey()]) }}">
             <input type="hidden" name="_method" value="PATCH" />
             <div class="form-group">
