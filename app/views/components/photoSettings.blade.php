@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <div class="col-xs-12 text-center">
         <div class="input-group">
-            <span class="input-group-addon">
-                <i class="fa fa-share-alt"></i>
-            </span>
             <input type="text" class="form-control photo-url" value="{{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}}">
+            <span class="input-group-btn">
+                <a href="{{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}}" class="btn btn-primary"><i class="fa fa-external-link"></i></a>
+            </span>
         </div>
     </div>
     <div class="col-xs-12"><hr /></div>

@@ -76,30 +76,36 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function show($albumId, $id)
+    public function show($albumId, $photoId)
     {
+        list($photoId, $imageType) = array_pad(
+            preg_split('/\.(jpg|jpeg|png)$/i', $photoId, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE),
+            2,
+            null
+        );
+
         $album = Album::find($albumId);
-        $userId = Auth::user()->getKey();
+        $photo = Photo::find($photoId);
+        $user = Auth::user();
 
         if (
             empty($album)
-            || $album->getAttribute('user_id') !== $userId
+            || empty($photo)
+            || $album->getAttribute('user_id') !== $user->getKey()
+            || $photo->getAttribute('album_id') !== $album->getKey()
         ) {
-            return Response::json(null, 403);
+            if (Request::ajax()) {
+                return Response::json(null, 403);
+            } else {
+                return Redirect::route('albums.index');
+            }
         }
 
-        $query = Photo::query();
-        $query->where('id', $id);
-        $query->where('album_id', $albumId);
-        $photo = $query->first();
-
-        if (empty($photo)) {
-            return Response::json(null, 404);
+        if (!empty($imageType)) {
+            return Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'))->response();
         }
 
-        $image = Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'));
-
-        return $image->response();
+        return View::make('layouts.photoShow')->with(compact('album', 'photo'));
     }
 
 

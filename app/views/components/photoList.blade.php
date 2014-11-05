@@ -2,8 +2,8 @@
 @foreach ($photos as $idx => $photo)
     <div class="col-xs-12 col-md-3">
         <div class="thumbnail">
-            <a href="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}">
-                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}">
+            <a href="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey() . '.jpg']) }}">
+                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey() . '.jpg']) }}">
             </a>
             <div class="caption">
                 <h3>

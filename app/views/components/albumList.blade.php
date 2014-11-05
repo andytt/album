@@ -5,7 +5,7 @@
             {{-- */ $photo = $album->photos()->first(); /* --}}
             <a href="{{ URL::route('albums.show', [$album->getKey()]) }}">
             @if (!empty($photo))
-                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}">
+                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey() . '.jpg']) }}">
             @else
                 <img data-src="holder.js/100%x200/font:PT Mono/text:Empty Album" alt="This album is currently empty.">
             @endif
