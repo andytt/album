@@ -38,6 +38,11 @@ Route::group([
         'uses' => 'AlbumController@albumSettings'
     ]);
 
+    Route::any('albums/{albumId}/photos/{photoId}/settings', [
+        'as' => 'albums.photos.api.settings',
+        'uses' => 'PhotoController@photoSettings'
+    ]);
+
     Route::resource('albums.photos', 'PhotoController');
     Route::resource('albums', 'AlbumController');
 });

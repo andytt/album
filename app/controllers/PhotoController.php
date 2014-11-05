@@ -133,10 +133,43 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($albumId, $id)
+    public function destroy($albumId, $photoId)
     {
-        //
+        $album = Album::find($albumId);
+        $user = Auth::user();
+
+        if (
+            empty($album)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Response::json(null, 403);
+        }
+
+        $photo = Photo::find($photoId);
+
+        if (empty($photo) || $photo->delete()) {
+            return Response::json(null, 200);
+        }
+
+        return Response::json(null, 500);
     }
 
+    public function photoSettings($albumId, $photoId)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
 
+        $album = Album::find($albumId);
+        $photo = Photo::find($photoId);
+        $user = Auth::user();
+
+        if (
+            empty($album)
+            || empty($photo)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Response::json(null, 403);
+        }
+
+        return View::make('components.photoSettings')->with(compact('album', 'photo'));
+    }
 }

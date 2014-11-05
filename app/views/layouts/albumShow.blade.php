@@ -49,7 +49,7 @@
 @section('scripts')
 
 <script>
-    (function ($) {
+    (function ($, document) {
         $(function () {
             $('.btn-add-photo').colorbox({
                 closeButton: false,
@@ -57,12 +57,18 @@
                 maxWidth: '95%'
             });
 
-            $('a.thumbnail').colorbox({
+            $('.thumbnail').children('a').colorbox({
                 rel: '{{ $album->getKey() }}',
                 photo: true,
                 closeButton: false,
-                maxWidth: '95%',
-                maxHeight: '95%'
+                maxWidth: '99%',
+                maxHeight: '99%'
+            });
+
+            $('.photo-navicon').colorbox({
+                closeButton: false,
+                width: 500,
+                maxWidth: '99%'
             });
 
             $('.navbar-create-album').colorbox({
@@ -70,8 +76,23 @@
                 width: 500,
                 maxWidth: '95%'
             });
+
+            $(document)
+            .on('click', '.delete-photo', function (e) {
+                e.preventDefault();
+                var url = this.href,
+                    options = {
+                        _method: 'DELETE'
+                    };
+
+                if (confirm('Are U SURE?')) {
+                    $.post(url, options).done(function () {
+                        location.reload()
+                    });
+                }
+            });
         });
-    })(window.jQuery);
+    })(window.jQuery, document);
 </script>
 
 @stop
