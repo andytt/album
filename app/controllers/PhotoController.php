@@ -121,9 +121,30 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($albumId, $id)
+    public function update($albumId, $photoId)
     {
-        //
+        $album = Album::find($albumId);
+        $photo = Photo::find($photoId);
+        $user  = Auth::user();
+
+        if (
+            empty($album)
+            || empty($photo)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Redirect::route('albums.show', [$album->getKey()]);
+        }
+
+        $name = Input::get('photoName', null);
+        $description = Input::get('photoDescription', null);
+
+        if (empty($name) && empty($description)) {
+            return Redirect::route('albums.show', [$album->getKey()]);
+        }
+
+        $photo->update(compact('name', 'description'));
+
+        return Redirect::route('albums.show', [$album->getKey()]);
     }
 
 

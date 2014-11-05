@@ -12,7 +12,7 @@
             @endif
         </button>
     </div>
-    <hr>
+    <div class="col-xs-12"><hr /></div>
     <div class="col-xs-12 text-center">
         <a href="{{ URL::route('albums.destroy', [$album->getKey()]) }}"
             class="btn btn-danger btn-sm delete-album">
