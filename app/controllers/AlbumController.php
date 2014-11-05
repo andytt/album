@@ -113,9 +113,23 @@ class AlbumController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($albumId)
     {
-        //
+        $album = Album::find($albumId);
+        $user = Auth::user();
+
+        if (
+            empty($album)
+            || $album->getAttribute('user_id') !== $user->getKey()
+        ) {
+            return Response::json(null, 403);
+        }
+
+        if ($album->delete()) {
+            return Response::json(null, 200);
+        }
+
+        return Response::json(null, 500);
     }
 
     public function togglePublic($albumId)

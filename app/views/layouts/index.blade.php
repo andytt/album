@@ -47,7 +47,7 @@
 @section('scripts')
 
 <script>
-    (function ($, document) {
+    (function ($, document, location) {
         $(function () {
             $('.navbar-create-album').colorbox({
                 closeButton: false,
@@ -61,7 +61,8 @@
                 maxWidth: '95%'
             });
 
-            $(document).on('click', '.toggle-privacy', function (e) {
+            $(document)
+            .on('click', '.toggle-privacy', function (e) {
                 e.preventDefault();
                 var $this    = $(this),
                     isPublic = 'public' === $this.attr('data-state') ? true : false,
@@ -81,9 +82,22 @@
 
                 $this.html('<i class="fa fa-refresh fa-spin"></i>&nbsp;Updating...');
                 $.getJSON(url).done(success);
+            })
+            .on('click', '.delete-album', function (e) {
+                e.preventDefault();
+                var url = this.href,
+                    options = {
+                        _method: 'DELETE'
+                    };
+
+                if (confirm('Are U SURE?')) {
+                    $.post(url, options).done(function () {
+                        location.reload()
+                    });
+                }
             });
         });
-    })(window.jQuery, document);
+    })(window.jQuery, document, location);
 </script>
 
 @stop
