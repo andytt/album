@@ -63,15 +63,24 @@
 
             $(document).on('click', '.toggle-privacy', function (e) {
                 e.preventDefault();
-                var $this = $(this);
+                var $this    = $(this),
+                    isPublic = 'public' === $this.attr('data-state') ? true : false,
+                    url      = $this.attr('data-url'),
+                    setState = function (newState) {
+                        $this.attr('data-state', newState);
+                    },
+                    success  = function () {
+                        if (isPublic) {
+                            $this.html('<i class="fa fa-ban text-danger"></i>&nbsp;Private');
+                            setState('private');
+                        } else {
+                            $this.html('<i class="fa fa-check text-success"></i>&nbsp;Public');
+                            setState('public');
+                        }
+                    };
 
-                $.getJSON(this.href, {}, function () {
-                    if ($this.find('i').hasClass('fa-check')) {
-                        $this.html('<i class="fa fa-ban text-danger"></i>&nbsp;Private');
-                    } else {
-                        $this.html('<i class="fa fa-check text-success"></i>&nbsp;Public');
-                    }
-                });
+                $this.html('<i class="fa fa-refresh fa-spin"></i>&nbsp;Updating...');
+                $.getJSON(url).done(success);
             });
         });
     })(window.jQuery, document);
