@@ -70,16 +70,16 @@ class AlbumController extends \BaseController {
     {
         $album = Album::find($id);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== Auth::user()->getKey()
-        ) {
-            return Redirect::route('albums.create');
-        }
+        if (empty($album)) return Redirect::route('albums.create');
+
+        $isAlbumCreator = $album->getAttribute('user_id') === Auth::user()->getKey();
+        $isAlbumPublic = (boolean) $album->getAttribute('public');
+
+        if (!$isAlbumCreator && !$isAlbumPublic) return Redirect::route('albums.create');
 
         $photos = $album->photos()->paginate();
 
-        return View::make('layouts.albumShow')->with(compact('album', 'photos'));
+        return View::make('layouts.albumShow')->with(compact('album', 'photos', 'isAlbumCreator'));
     }
 
 

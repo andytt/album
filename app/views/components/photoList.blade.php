@@ -12,12 +12,15 @@
                     @else
                         <span class="text-muted">Empty&nbsp;Name</span>
                     @endif
+
+                    @if ($isAlbumCreator)
                     <span class="pull-right">
                         <a href="{{ URL::route('albums.photos.api.settings', [$album->getKey(), $photo->getKey()]) }}"
                             class="photo-navicon">
                             <i class="fa fa-navicon"></i>
                         </a>
                     </span>
+                    @endif
                 </h3>
             </div>
         </div>

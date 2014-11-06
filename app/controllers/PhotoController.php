@@ -88,17 +88,18 @@ class PhotoController extends \BaseController {
         $photo = Photo::find($photoId);
         $user = Auth::user();
 
-        if (
-            empty($album)
-            || empty($photo)
-            || $album->getAttribute('user_id') !== $user->getKey()
-            || $photo->getAttribute('album_id') !== $album->getKey()
-        ) {
-            if (Request::ajax()) {
-                return Response::json(null, 403);
-            } else {
-                return Redirect::route('albums.index');
-            }
+        if (empty($album) || empty($photo)) {
+            if (Request::ajax()) return Response::json(null, 403);
+            else return Redirect::route('albums.index');
+        }
+
+        $isAlbumCreator = $album->getAttribute('user_id') === $user->getKey();
+        $isAlbumPublic  = (boolean) $album->getAttribute('public');
+        $isPhotoInAlbum = $photo->getAttribute('album_id') === $album->getKey();
+
+        if (!$isPhotoInAlbum || (!$isAlbumCreator && !$isAlbumPublic)) {
+            if (Request::ajax()) return Response::json(null, 403);
+            else return Redirect::route('albums.index');
         }
 
         if (!empty($imageType)) {
