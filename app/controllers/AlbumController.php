@@ -97,14 +97,12 @@ class AlbumController extends \BaseController
         $album = $this->albumRepository->findOrNew($albumId);
 
         if (!$this->albumRepository->canUserDestroy(Auth::user(), $album)) {
-            return Response::json(null, 403);
+            return Redirect::route('albums.index');
         }
 
-        if ($album->delete()) {
-            return Response::json(null, 200);
-        }
+        $album->delete();
 
-        return Response::json(null, 500);
+        return Redirect::route('albums.index');
     }
 
     public function togglePublic($albumId)

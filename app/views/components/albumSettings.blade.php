@@ -14,9 +14,9 @@
     </div>
     <div class="col-xs-12"><hr /></div>
     <div class="col-xs-12 text-center">
-        <a href="{{ URL::route('albums.destroy', [$album->getKey()]) }}"
-            class="btn btn-danger btn-sm delete-album">
-                <i class="fa fa-trash"></i>&nbsp;Delete&nbsp;Album
-        </a>
+        <form role="form" method="POST" action="{{ URL::route('albums.destroy', [$album->getKey()]) }}">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button type="submit" class="btn btn-danger btn-sm delete-album"><i class="fa fa-trash"></i>&nbsp;Delete&nbsp;Album</button>
+        </form>
     </div>
 </div>

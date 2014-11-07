@@ -84,16 +84,8 @@
                 $.getJSON(url).done(success);
             })
             .on('click', '.delete-album', function (e) {
-                e.preventDefault();
-                var url = this.href,
-                    options = {
-                        _method: 'DELETE'
-                    };
-
-                if (confirm('Are U SURE?')) {
-                    $.post(url, options).done(function () {
-                        location.reload()
-                    });
+                if (!confirm('Are U SURE?')) {
+                    e.preventDefault();
                 }
             });
         });
