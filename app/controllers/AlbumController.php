@@ -1,6 +1,15 @@
 <?php
 
-class AlbumController extends \BaseController {
+use Album\Repositories\AlbumRepositoryInterface;
+
+class AlbumController extends \BaseController
+{
+    protected $albumRepository;
+
+    public function __construct(AlbumRepositoryInterface $albumRepository)
+    {
+        $this->albumRepository = $albumRepository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -9,13 +18,10 @@ class AlbumController extends \BaseController {
      */
     public function index()
     {
-        $query = Album::query();
-        $query->where('user_id', Auth::user()->getKey());
-        $albums = $query->paginate();
+        $albums = $this->albumRepository->getAlbumsByUser(Auth::user())->paginate();
 
         return View::make('layouts.index')->with(compact('albums'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -48,11 +54,11 @@ class AlbumController extends \BaseController {
             return Redirect::route('albums.create')->withInput(Input::all())->withErrors($validation);
         }
 
-        $album = Album::create([
-            'user_id' => Auth::user()->getKey(),
-            'name' => Input::get('albumName', null),
-            'description' => Input::get('albumDescription', null)
-        ]);
+        $album = $this->albumRepository->create(
+            Auth::user(),
+            Input::get('albumName'),
+            Input::get('albumDescription')
+        );
 
         $id = $album->getKey();
 
@@ -68,44 +74,17 @@ class AlbumController extends \BaseController {
      */
     public function show($id)
     {
-        $album = Album::find($id);
+        $album = $this->albumRepository->findOrNew($id);
 
-        if (empty($album)) return Redirect::route('albums.create');
-
-        $isAlbumCreator = $album->getAttribute('user_id') === Auth::user()->getKey();
-        $isAlbumPublic = (boolean) $album->getAttribute('public');
-
-        if (!$isAlbumCreator && !$isAlbumPublic) return Redirect::route('albums.create');
+        if (!$this->albumRepository->canUserRead(Auth::user(), $album)) {
+            return Redirect::route('albums.create');
+        }
 
         $photos = $album->photos()->paginate();
+        $isAlbumCreator = $this->albumRepository->canUserUpdate(Auth::user(), $album);
 
         return View::make('layouts.albumShow')->with(compact('album', 'photos', 'isAlbumCreator'));
     }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -115,13 +94,9 @@ class AlbumController extends \BaseController {
      */
     public function destroy($albumId)
     {
-        $album = Album::find($albumId);
-        $user = Auth::user();
+        $album = $this->albumRepository->findOrNew($albumId);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== $user->getKey()
-        ) {
+        if (!$this->albumRepository->canUserDestroy(Auth::user(), $album)) {
             return Response::json(null, 403);
         }
 
@@ -134,20 +109,13 @@ class AlbumController extends \BaseController {
 
     public function togglePublic($albumId)
     {
-        $album = Album::find($albumId);
-        $user = Auth::user();
+        $album = $this->albumRepository->findOrNew($albumId);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== $user->getKey()
-        ) {
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
             return Response::json(null, 403);
         }
 
-        $public = $album->getAttribute('public');
-        $album->setAttribute('public', !(boolean) $public);
-
-        if ($album->save()) {
+        if ($this->albumRepository->update($album, null, null, !$album->getPrivacy())) {
             return Response::json(null);
         }
 
@@ -158,13 +126,9 @@ class AlbumController extends \BaseController {
     {
         if (!Request::ajax()) return View::make('layouts.exception');
 
-        $album = Album::find($albumId);
-        $user = Auth::user();
+        $album = $this->albumRepository->findOrNew($albumId);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== $user->getKey()
-        ) {
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
             return Response::json(null, 403);
         }
 

@@ -1,6 +1,6 @@
-<?php
+<?php namespace Photo;
 
-class Photo extends Eloquent
+class Photo extends \Eloquent
 {
     protected $table = 'photos';
 
