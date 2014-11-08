@@ -74,7 +74,7 @@
     <script src="/vendor/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="/vendor/holderjs/holder.js"></script>
 
-    @include('external.googleAnalytic');
+    @include('external.googleAnalytic')
 
     @yield('scripts', '')
 </body>
