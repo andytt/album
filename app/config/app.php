@@ -96,6 +96,7 @@ return array(
 	'providers' => array(
 
 		'Album\Repositories\AlbumRepositoryInterfaceServiceProvider',
+		'Photo\Repositories\PhotoRepositoryInterfaceServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',

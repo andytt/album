@@ -1,15 +1,18 @@
 <?php
 
 use Album\Repositories\AlbumRepositoryInterface;
+use Photo\Repositories\PhotoRepositoryInterface;
 use Photo\Photo;
 
 class PhotoController extends \BaseController
 {
     protected $albumRepository;
+    protected $photoRepository;
 
-    public function __construct(AlbumRepositoryInterface $albumRepository)
+    public function __construct(AlbumRepositoryInterface $albumRepository, PhotoRepositoryInterface $photoRepository)
     {
         $this->albumRepository = $albumRepository;
+        $this->photoRepository = $photoRepository;
     }
 
     /**
@@ -54,10 +57,7 @@ class PhotoController extends \BaseController
             $newFilename = mt_rand();
 
             if (Image::make($file->getRealPath())->save(storage_path('images') . '/' . $newFilename, 100)) {
-                Photo::create([
-                    'album_id' => $album->getKey(),
-                    'file_id' => $newFilename
-                ]);
+                $this->photoRepository->create($album, null, null, $newFilename);
             }
         }
 
@@ -86,7 +86,7 @@ class PhotoController extends \BaseController
             else return Redirect::route('albums.index');
         }
 
-        $photo = Photo::find($photoId);
+        $photo = $this->photoRepository->findOrNew($photoId);
 
         if (!empty($imageType)) {
             return Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'))->response();
@@ -129,8 +129,8 @@ class PhotoController extends \BaseController
             return Redirect::route('albums.show', [$album->getKey()]);
         }
 
-        $photo = Photo::find($photoId);
-        $photo->update(compact('name', 'description'));
+        $photo = $this->photoRepository->findOrNew($photoId);
+        $this->photoRepository->update($photo, $name, $description);
 
         return Redirect::route('albums.show', [$album->getKey()]);
     }
@@ -150,7 +150,7 @@ class PhotoController extends \BaseController
             return Response::json(null, 403);
         }
 
-        $photo = Photo::find($photoId);
+        $photo = $this->photoRepository->findOrNew($photoId);
 
         if (empty($photo) || $photo->delete()) {
             return Response::json(null, 200);
@@ -169,7 +169,7 @@ class PhotoController extends \BaseController
             return Response::json(null, 403);
         }
 
-        $photo = Photo::find($photoId);
+        $photo = $this->photoRepository->findOrNew($photoId);
 
         return View::make('components.photoSettings')->with(compact('album', 'photo'));
     }
