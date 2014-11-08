@@ -2,6 +2,8 @@
 
 @section('styles')
 
+{{-- */ $backgroundImages = ['sunset', 'sunsetSky', 'sky']; /* --}}
+
 <style>
     .container-fluid {
         padding: 0;
@@ -12,7 +14,7 @@
         width: 100%;
         height: 100%;
         display: table;
-        background: url('/sunset.jpg');
+        background: url('/{{ $backgroundImages[array_rand($backgroundImages)] }}.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -26,7 +28,7 @@
         top: 0;
         bottom: 0;
         background-color: #000;
-        opacity: .3;
+        opacity: .4;
     }
 
     #form-signup-container {
