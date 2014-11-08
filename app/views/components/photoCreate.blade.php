@@ -1,6 +1,6 @@
 <h3 class="text-center">Upload Photos</h3>
 <div class="btn btn-primary btn-block fileinput-button">
-    <i class="fa fa-camera"> Select Files...</i>
+    <i class="fa fa-camera"></i><span>&nbsp;Select&nbsp;Files...</span>
     <input type="file" name="files[]" id="photo-upload" multiple>
 </div>
 
@@ -17,6 +17,11 @@
                 url: '{{ URL::route('albums.photos.store', [$album->getKey()]) }}',
                 dataType: 'JSON',
                 sequentialUploads: true,
+                add: function (e, data) {
+                    $('.fileinput-button').find('i').removeClass('fa-camera').addClass('fa-refresh fa-spin');
+                    $('.fileinput-button').find('span').html('&nbsp;Uploading...');
+                    data.submit();
+                },
                 progressall: function (e, data) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
 

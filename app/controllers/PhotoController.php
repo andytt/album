@@ -1,17 +1,19 @@
 <?php
 
-class PhotoController extends \BaseController {
+use Album\Repositories\AlbumRepositoryInterface;
+use Photo\Repositories\PhotoRepositoryInterface;
+use Photo\Photo;
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index($albumId)
+class PhotoController extends \BaseController
+{
+    protected $albumRepository;
+    protected $photoRepository;
+
+    public function __construct(AlbumRepositoryInterface $albumRepository, PhotoRepositoryInterface $photoRepository)
     {
-        //
+        $this->albumRepository = $albumRepository;
+        $this->photoRepository = $photoRepository;
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -20,9 +22,9 @@ class PhotoController extends \BaseController {
      */
     public function create($albumId)
     {
-        $album = Album::find($albumId);
+        $album = $this->albumRepository->findOrNew($albumId);
 
-        if (empty($album)) {
+        if (!$this->albumRepository->canUserCreate(Auth::user(), $album)) {
             return Redirect::route('albums.create');
         }
 
@@ -45,13 +47,9 @@ class PhotoController extends \BaseController {
             return Response::json(null, 400);
         }
 
-        $album = Album::find($albumId);
-        $userId = Auth::user()->getKey();
+        $album = $this->albumRepository->findOrNew($albumId);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== $userId
-        ) {
+        if (!$this->albumRepository->canUserCreate(Auth::user(), $album)) {
             return Response::json(null, 403);
         }
 
@@ -59,10 +57,7 @@ class PhotoController extends \BaseController {
             $newFilename = mt_rand();
 
             if (Image::make($file->getRealPath())->save(storage_path('images') . '/' . $newFilename, 100)) {
-                Photo::create([
-                    'album_id' => $album->getKey(),
-                    'file_id' => $newFilename
-                ]);
+                $this->photoRepository->create($album, null, null, $newFilename);
             }
         }
 
@@ -76,30 +71,28 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function show($albumId, $id)
+    public function show($albumId, $photoId)
     {
-        $album = Album::find($albumId);
-        $userId = Auth::user()->getKey();
+        list($photoId, $imageType) = array_pad(
+            preg_split('/\.(jpg|jpeg|png)$/i', $photoId, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE),
+            2,
+            null
+        );
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== $userId
-        ) {
-            return Response::json(null, 403);
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserRead(Auth::user(), $album)) {
+            if (Request::ajax()) return Response::json(null, 403);
+            else return Redirect::route('albums.index');
         }
 
-        $query = Photo::query();
-        $query->where('id', $id);
-        $query->where('album_id', $albumId);
-        $photo = $query->first();
+        $photo = $this->photoRepository->findOrNew($photoId);
 
-        if (empty($photo)) {
-            return Response::json(null, 404);
+        if (!empty($imageType)) {
+            return Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'))->response();
         }
 
-        $image = Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'));
-
-        return $image->response();
+        return View::make('layouts.photoShow')->with(compact('album', 'photo'));
     }
 
 
@@ -121,9 +114,25 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($albumId, $id)
+    public function update($albumId, $photoId)
     {
-        //
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Redirect::route('albums.show', [$album->getKey()]);
+        }
+
+        $name = Input::get('photoName', null);
+        $description = Input::get('photoDescription', null);
+
+        if (empty($name) && empty($description)) {
+            return Redirect::route('albums.show', [$album->getKey()]);
+        }
+
+        $photo = $this->photoRepository->findOrNew($photoId);
+        $this->photoRepository->update($photo, $name, $description);
+
+        return Redirect::route('albums.show', [$album->getKey()]);
     }
 
 
@@ -133,10 +142,35 @@ class PhotoController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($albumId, $id)
+    public function destroy($albumId, $photoId)
     {
-        //
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserDestroy(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        $photo = $this->photoRepository->findOrNew($photoId);
+
+        if (empty($photo) || $photo->delete()) {
+            return Response::json(null, 200);
+        }
+
+        return Response::json(null, 500);
     }
 
+    public function photoSettings($albumId, $photoId)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
 
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        $photo = $this->photoRepository->findOrNew($photoId);
+
+        return View::make('components.photoSettings')->with(compact('album', 'photo'));
+    }
 }

@@ -5,13 +5,16 @@
             {{-- */ $photo = $album->photos()->first(); /* --}}
             <a href="{{ URL::route('albums.show', [$album->getKey()]) }}">
             @if (!empty($photo))
-                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}">
+                <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey() . '.jpg']) }}">
             @else
                 <img data-src="holder.js/100%x200/font:PT Mono/text:Empty Album" alt="This album is currently empty.">
             @endif
             </a>
             <div class="caption">
-                <h3>{{{ $album->getAttribute('name') }}}</h3>
+                <h3>
+                    <span>{{{ $album->getAttribute('name') }}}</span>
+                    <span class="pull-right"><a href="{{ URL::route('albums.api.settings', [$album->getKey()]) }}" class="album-navicon"><i class="fa fa-navicon"></i></a></span>
+                </h3>
             </div>
         </div>
     </div>

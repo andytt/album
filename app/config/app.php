@@ -95,6 +95,8 @@ return array(
 
 	'providers' => array(
 
+		'Album\Repositories\AlbumRepositoryInterfaceServiceProvider',
+		'Photo\Repositories\PhotoRepositoryInterfaceServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
@@ -151,7 +153,7 @@ return array(
 
 	'aliases' => array(
 
-		'Image' => 'Intervention\Image\Facades\Image',
+		'Image'           => 'Intervention\Image\Facades\Image',
 		'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',
 		'Auth'            => 'Illuminate\Support\Facades\Auth',

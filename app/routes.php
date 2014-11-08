@@ -28,6 +28,21 @@ Route::group([
         'uses' => 'AuthController@logout'
     ]);
 
+    Route::any('albums/{albumId}/privacy', [
+        'as' => 'albums.api.privacy',
+        'uses' => 'AlbumController@togglePublic'
+    ]);
+
+    Route::any('albums/{albumId}/settings', [
+        'as' => 'albums.api.settings',
+        'uses' => 'AlbumController@albumSettings'
+    ]);
+
+    Route::any('albums/{albumId}/photos/{photoId}/settings', [
+        'as' => 'albums.photos.api.settings',
+        'uses' => 'PhotoController@photoSettings'
+    ]);
+
     Route::resource('albums.photos', 'PhotoController');
     Route::resource('albums', 'AlbumController');
 });

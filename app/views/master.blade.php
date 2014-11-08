@@ -30,7 +30,14 @@
 
         #title-banner {
             font-family: 'Lobster', Arial, serif;
-            font-size: 100px;
+            font-size: 7em;
+            color: #fff;
+        }
+
+        #subtitle-banner {
+            font-family: 'Lobster', Arial, serif;
+            font-size: 2em;
+            color: #fff;
         }
 
         #cboxCurrent {

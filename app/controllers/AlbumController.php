@@ -1,6 +1,15 @@
 <?php
 
-class AlbumController extends \BaseController {
+use Album\Repositories\AlbumRepositoryInterface;
+
+class AlbumController extends \BaseController
+{
+    protected $albumRepository;
+
+    public function __construct(AlbumRepositoryInterface $albumRepository)
+    {
+        $this->albumRepository = $albumRepository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -9,13 +18,10 @@ class AlbumController extends \BaseController {
      */
     public function index()
     {
-        $query = Album::query();
-        $query->where('user_id', Auth::user()->getKey());
-        $albums = $query->paginate();
+        $albums = $this->albumRepository->getAlbumsByUser(Auth::user())->paginate();
 
         return View::make('layouts.index')->with(compact('albums'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -48,11 +54,11 @@ class AlbumController extends \BaseController {
             return Redirect::route('albums.create')->withInput(Input::all())->withErrors($validation);
         }
 
-        $album = Album::create([
-            'user_id' => Auth::user()->getKey(),
-            'name' => Input::get('albumName', null),
-            'description' => Input::get('albumDescription', null)
-        ]);
+        $album = $this->albumRepository->create(
+            Auth::user(),
+            Input::get('albumName'),
+            Input::get('albumDescription')
+        );
 
         $id = $album->getKey();
 
@@ -68,44 +74,17 @@ class AlbumController extends \BaseController {
      */
     public function show($id)
     {
-        $album = Album::find($id);
+        $album = $this->albumRepository->findOrNew($id);
 
-        if (
-            empty($album)
-            || $album->getAttribute('user_id') !== Auth::user()->getKey()
-        ) {
+        if (!$this->albumRepository->canUserRead(Auth::user(), $album)) {
             return Redirect::route('albums.create');
         }
 
         $photos = $album->photos()->paginate();
+        $isAlbumCreator = $this->albumRepository->canUserUpdate(Auth::user(), $album);
 
-        return View::make('layouts.albumShow')->with(compact('album', 'photos'));
+        return View::make('layouts.albumShow')->with(compact('album', 'photos', 'isAlbumCreator'));
     }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -113,10 +92,44 @@ class AlbumController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($albumId)
     {
-        //
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserDestroy(Auth::user(), $album)) {
+            return Redirect::route('albums.index');
+        }
+
+        $album->delete();
+
+        return Redirect::route('albums.index');
     }
 
+    public function togglePublic($albumId)
+    {
+        $album = $this->albumRepository->findOrNew($albumId);
 
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        if ($this->albumRepository->update($album, null, null, !$album->getPrivacy())) {
+            return Response::json(null);
+        }
+
+        return Response::json(null, 500);
+    }
+
+    public function albumSettings($albumId)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
+
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        return View::make('components.albumSettings')->with(compact('album'));
+    }
 }
