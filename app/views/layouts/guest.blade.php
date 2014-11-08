@@ -47,7 +47,7 @@
             <h1 id="title-banner">Gallery</h1>
         </div>
         <div class="col-xs-12 text-center">
-            <h3 id="subtitle-banner">Discover The Pretties ;)</h3>
+            <h3 id="subtitle-banner">Discover The Prettiest ;)</h3>
         </div>
         <div class="col-xs-12"><br /></div>
         <div class="col-xs-12"><br /></div>
