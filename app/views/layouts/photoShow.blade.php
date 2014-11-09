@@ -20,10 +20,11 @@
             <img src="{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey() . '.jpg']) }}">
         </a>
     </div>
-    @if ($isAlbumCreator)
+    @if ($isAlbumCreator || true)
         <div class="col-xs-12 col-md-6 col-md-offset-3">
             <ul class="nav nav-pills nav-justified visible-md visible-lg" role="tablist">
                 <li role="presentation"><a href="#" class="image-rotate-left"><i class="fa fa-rotate-left"></i>&nbsp;Rotate&nbsp;Left</a></li>
+                <li role="presentation"><a href="{{ URL::route('albums.photos.api.textWatermark', [$album->getKey(), $photo->getKey()]) }}" class="image-add-watermark">Add&nbsp;Text&nbsp;Watermark</a></li>
                 <li role="presentation"><a href="#" class="image-rotate-right">Rotate&nbsp;Right&nbsp;<i class="fa fa-rotate-right"></i></a></li>
             </ul>
             <ul class="nav nav-pills nav-justified visible-xs visible-sm" role="tablist">
@@ -31,7 +32,8 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Edit&nbsp;Photo&nbsp;<i class="fa fa-caret-down"></i></a>
                     <ul class="dropdown-menu" role="menu">
                         <li role="presentation"><a href="#" class="image-rotate-left"><i class="fa fa-rotate-left"></i>&nbsp;Rotate&nbsp;Left</a></li>
-                        <li role="presentation"><a href="#" class="image-rotate-right">Rotate&nbsp;Right&nbsp;<i class="fa fa-rotate-right"></i></a></li>
+                        <li role="presentation"><a href="{{ URL::route('albums.photos.api.textWatermark', [$album->getKey(), $photo->getKey()]) }}" class="image-add-watermark"><i class="fa fa-pencil"></i>&nbsp;Add&nbsp;Text&nbsp;Watermark</a></li>
+                        <li role="presentation"><a href="#" class="image-rotate-right"><i class="fa fa-rotate-right"></i>&nbsp;Rotate&nbsp;Right</a></li>
                     </ul>
                 </li>
             </ul>
@@ -69,6 +71,12 @@
                 photo: true,
                 maxWidth: '99%',
                 maxHeight: '99%'
+            });
+
+            $('.image-add-watermark').colorbox({
+                closeButton: false,
+                width: 500,
+                maxWidth: '95%'
             });
 
             $('.image-rotate-left').on('click', function (e) {

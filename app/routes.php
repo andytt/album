@@ -48,6 +48,11 @@ Route::group([
         'uses' => 'PhotoController@photoRotate'
     ]);
 
+    Route::any('albums/{albumId}/photos/{photoId}/watermark/image', [
+        'as' => 'albums.photos.api.textWatermark',
+        'uses' => 'PhotoController@photoWatermark'
+    ]);
+
     Route::resource('albums.photos', 'PhotoController');
     Route::resource('albums', 'AlbumController');
 });

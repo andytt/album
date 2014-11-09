@@ -207,4 +207,29 @@ class PhotoController extends \BaseController
 
         return Response::json(null, 500);
     }
+
+    public function photoWatermark($albumId, $photoId)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
+
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        $photo = $this->photoRepository->findOrNew($photoId);
+
+        if (!Input::hasFile('files')) return View::make('components.photoWatermark', compact('album', 'photo'));
+
+        $imagePath = storage_path('images') . '/' . $photo->getAttribute('file_id');
+        $image = Image::make($imagePath);
+        $watermark = Image::make(Input::file('files')[0]->getRealPath());
+
+        if ($this->photoRepository->imageWatermark($image, $watermark, 'bottom-right')->save($imagePath)) {
+            return Response::json(null, 200);
+        }
+
+        return Response::json(null, 500);
+    }
 }

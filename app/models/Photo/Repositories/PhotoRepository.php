@@ -39,4 +39,11 @@ class PhotoRepository implements PhotoRepositoryInterface
     {
         return $image->rotate($angle, $bgcolor);
     }
+
+    public function imageWatermark(Image $image, Image $watermark, $position)
+    {
+        $width = intval(ceil($image->width() * 0.3), 10);
+        $watermark = $watermark->widen($width);
+        return $image->insert($watermark, $position);
+    }
 }

@@ -14,4 +14,6 @@ interface PhotoRepositoryInterface
     public function update(Photo $photo, $photoName, $photoDescription);
 
     public function rotateImage(Image $image, $angle, $bgcolor = '#ffffff');
+
+    public function imageWatermark(Image $image, Image $watermark, $position);
 }
