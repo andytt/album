@@ -8,9 +8,9 @@
             <div class="caption">
                 <h3>
                     @if ($photo->getAttribute('name'))
-                        <span>{{{ $photo->getAttribute('name') }}}</span>
+                        <a href="{{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}}"><span>{{{ $photo->getAttribute('name') }}}</span></a>
                     @else
-                        <span class="text-muted">Empty&nbsp;Name</span>
+                        <a href="{{{ URL::route('albums.photos.show', [$album->getKey(), $photo->getKey()]) }}}"><em>Empty&nbsp;Name</em></a>
                     @endif
 
                     @if ($isAlbumCreator)
