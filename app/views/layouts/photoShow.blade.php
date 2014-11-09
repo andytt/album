@@ -29,6 +29,12 @@
 <script>
     (function ($) {
         $(function () {
+            $('#album-settings').colorbox({
+                closeButton: false,
+                width: 500,
+                maxWidth: '95%'
+            });
+
             $('.navbar-create-album').colorbox({
                 closeButton: false,
                 width: 500,

@@ -102,7 +102,9 @@ class PhotoController extends \BaseController
             return Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'))->response();
         }
 
-        return View::make('layouts.photoShow')->with(compact('album', 'photo'));
+        $isAlbumCreator = $this->albumRepository->canUserUpdate(Auth::user(), $album);
+
+        return View::make('layouts.photoShow')->with(compact('album', 'photo', 'isAlbumCreator'));
     }
 
 
