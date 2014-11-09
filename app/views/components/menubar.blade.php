@@ -15,6 +15,14 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
+                @if (Str::contains(Route::currentRouteName(), 'albums'))
+                    <li><a href="{{ URL::to('/') }}"><i class="fa fa-home"></i>&nbsp;Albums</a></li>
+                @endif
+
+                @if (Str::contains(Route::currentRouteName(), 'photos') && !empty($album))
+                    <li><a href="{{ URL::route('albums.show', [$album->getKey()]) }}"><i class="fa fa-photo"></i>&nbsp;Photos</a></li>
+                @endif
+
                 <li><a class="navbar-create-album" href="{{ URL::route('albums.create') }}"><i class="fa fa-plus"></i>&nbsp;Album</a></li>
                 @if (!empty($album) && !empty($isAlbumCreator))
                     <li><a class="btn-add-photo" href="{{ URL::route('albums.photos.create', [$album->getKey()]) }}"><i class="fa fa-plus"></i>&nbsp;Photos</a></li>
