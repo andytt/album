@@ -86,7 +86,12 @@
             new PNotify({
                 title: 'NEW PHOTO!',
                 type: 'success',
-                text: [data.user, 'add a photo to', data.album.name, 'would you like to <a href="', data.url, '">check it out</a>?'].join('&nbsp;'),
+                text: data.user
+                    + ' add a photo to '
+                    + data.album.name
+                    + ' would you like to <a href="'
+                    + data.url
+                    + '">check it out</a>?',
                 animate: 'none',
                 styling: 'bootstrap3',
                 icon: false,
