@@ -3,6 +3,7 @@
 use Album\Album;
 use Photo\Photo;
 use User;
+use Intervention\Image\Image;
 
 class PhotoRepository implements PhotoRepositoryInterface
 {
@@ -32,5 +33,10 @@ class PhotoRepository implements PhotoRepositoryInterface
         }
 
         return $photo->save();
+    }
+
+    public function rotateImage(Image $image, $angle, $bgcolor = '#ffffff')
+    {
+        return $image->rotate($angle, $bgcolor);
     }
 }

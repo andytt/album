@@ -43,6 +43,11 @@ Route::group([
         'uses' => 'PhotoController@photoSettings'
     ]);
 
+    Route::get('albums/{albumId}/photos/{photoId}/rotate/{dir}', [
+        'as' => 'albums.photos.api.rotate',
+        'uses' => 'PhotoController@photoRotate'
+    ]);
+
     Route::resource('albums.photos', 'PhotoController');
     Route::resource('albums', 'AlbumController');
 });

@@ -185,4 +185,26 @@ class PhotoController extends \BaseController
 
         return View::make('components.photoSettings')->with(compact('album', 'photo'));
     }
+
+    public function photoRotate($albumId, $photoId, $dir)
+    {
+        if (!Request::ajax()) return View::make('layouts.exception');
+
+        $album = $this->albumRepository->findOrNew($albumId);
+
+        if (!$this->albumRepository->canUserUpdate(Auth::user(), $album)) {
+            return Response::json(null, 403);
+        }
+
+        $photo = $this->photoRepository->findOrNew($photoId);
+        $imagePath = storage_path('images') . '/' . $photo->getAttribute('file_id');
+        $image = Image::make($imagePath);
+        $angle = ('right' === $dir) ? -90 : 90;
+
+        if ($this->photoRepository->rotateImage($image, $angle)->save($imagePath)) {
+            return Response::json(null, 200);
+        }
+
+        return Response::json(null, 500);
+    }
 }

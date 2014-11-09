@@ -3,6 +3,7 @@
 use Photo\Photo;
 use Album\Album;
 use User;
+use Intervention\Image\Image;
 
 interface PhotoRepositoryInterface
 {
@@ -11,4 +12,6 @@ interface PhotoRepositoryInterface
     public function create(Album $album, $photoName, $photoDescription, $fileId);
 
     public function update(Photo $photo, $photoName, $photoDescription);
+
+    public function rotateImage(Image $image, $angle, $bgcolor = '#ffffff');
 }
