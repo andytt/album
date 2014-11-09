@@ -96,6 +96,8 @@
     </script>
     @endif
 
+    @include('external.googleAnalytic')
+
     @yield('scripts', '')
 </body>
 </html>
