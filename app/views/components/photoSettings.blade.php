@@ -23,7 +23,7 @@
                 />
             </div>
             <div class="form-group">
-                <label for="photo-description">Photo</label>
+                <label for="photo-description">Photo Description</label>
                 <input
                     type="text"
                     name="photoDescription"

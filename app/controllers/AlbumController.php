@@ -57,7 +57,8 @@ class AlbumController extends \BaseController
         $album = $this->albumRepository->create(
             Auth::user(),
             Input::get('albumName'),
-            Input::get('albumDescription')
+            Input::get('albumDescription'),
+            (boolean) Input::get('albumPublic', false)
         );
 
         $id = $album->getKey();

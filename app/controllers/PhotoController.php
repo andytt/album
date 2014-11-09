@@ -2,17 +2,23 @@
 
 use Album\Repositories\AlbumRepositoryInterface;
 use Photo\Repositories\PhotoRepositoryInterface;
+use Notifier\Repositories\NotifierRepositoryInterface;
 use Photo\Photo;
 
 class PhotoController extends \BaseController
 {
     protected $albumRepository;
     protected $photoRepository;
+    protected $notifierRepository;
 
-    public function __construct(AlbumRepositoryInterface $albumRepository, PhotoRepositoryInterface $photoRepository)
-    {
+    public function __construct(
+        AlbumRepositoryInterface $albumRepository,
+        PhotoRepositoryInterface $photoRepository,
+        NotifierRepositoryInterface $notifierRepository
+    ) {
         $this->albumRepository = $albumRepository;
         $this->photoRepository = $photoRepository;
+        $this->notifierRepository = $notifierRepository;
     }
 
     /**
@@ -57,7 +63,11 @@ class PhotoController extends \BaseController
             $newFilename = mt_rand();
 
             if (Image::make($file->getRealPath())->save(storage_path('images') . '/' . $newFilename, 100)) {
-                $this->photoRepository->create($album, null, null, $newFilename);
+                $photo = $this->photoRepository->create($album, null, null, $newFilename);
+
+                if ($album->getPrivacy()) {
+                    $this->notifierRepository->newPhotoAdded(Auth::user(), $album, $photo);
+                }
             }
         }
 

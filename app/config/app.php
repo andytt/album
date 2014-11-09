@@ -97,6 +97,7 @@ return array(
 
 		'Album\Repositories\AlbumRepositoryInterfaceServiceProvider',
 		'Photo\Repositories\PhotoRepositoryInterfaceServiceProvider',
+		'Notifier\Repositories\NotifierRepositoryInterfaceServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',

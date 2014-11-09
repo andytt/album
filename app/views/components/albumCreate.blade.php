@@ -14,6 +14,11 @@
             <p class="text-danger">{{{ $errors->first('albumDescription') }}}</p>
         @endif
     </div>
+    <div class="checkbox text-center">
+        <label>
+            <input type="checkbox" name="albumPublic" />Public&nbsp;This&nbsp;Album
+        </label>
+    </div>
     <button type="submit" class="btn btn-primary btn-block">Submit</button>
 </form>
 

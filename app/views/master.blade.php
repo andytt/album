@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/vendor/components-font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/vendor/jquery-colorbox/example4/colorbox.css">
     <link rel="stylesheet" href="/vendor/blueimp-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.core.min.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -73,6 +74,27 @@
     <script src="/vendor/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="/vendor/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="/vendor/holderjs/holder.js"></script>
+    <script src="//js.pusher.com/2.2/pusher.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.core.min.js"></script>
+
+    @if (Auth::user())
+    <script>
+        var pusher = new Pusher('{{ $_ENV['PUSHER_APP_KEY'] }}');
+        var channel = pusher.subscribe('photos');
+
+        channel.bind('create', function (data) {
+            new PNotify({
+                title: 'NEW PHOTO!',
+                type: 'success',
+                text: [data.user, 'add a photo to', data.album.name, 'would you like to <a href="', data.url, '">check it out</a>?'].join('&nbsp;'),
+                animate: 'none',
+                styling: 'bootstrap3',
+                icon: false,
+                shadow: false
+            });
+        });
+    </script>
+    @endif
 
     @yield('scripts', '')
 </body>
