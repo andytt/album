@@ -8,3 +8,4 @@
   ga('create', $_ENV['GOOGLE_ANALYTICS_ID'], 'auto');
   ga('send', 'pageview');
 </script>
+@endif
