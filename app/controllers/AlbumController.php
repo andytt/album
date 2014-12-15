@@ -9,6 +9,8 @@ class AlbumController extends \BaseController
     public function __construct(AlbumRepositoryInterface $albumRepository)
     {
         $this->albumRepository = $albumRepository;
+
+        $this->beforeFilter('auth');
     }
 
     /**

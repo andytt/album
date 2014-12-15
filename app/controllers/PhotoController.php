@@ -19,6 +19,10 @@ class PhotoController extends \BaseController
         $this->albumRepository = $albumRepository;
         $this->photoRepository = $photoRepository;
         $this->notifierRepository = $notifierRepository;
+
+        $this->beforeFilter('auth', [
+            'except' => ['show']
+        ]);
     }
 
     /**
