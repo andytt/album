@@ -20,4 +20,6 @@ interface AlbumRepositoryInterface
     public function canUserUpdate(User $user, Album $album);
 
     public function canUserDestroy(User $user, Album $album);
+
+    public function isPublic(Album $album);
 }

@@ -18,41 +18,37 @@ Route::any('users/login', [
 
 Route::resource('users', 'AuthController', ['only' => ['create', 'store']]);
 
-Route::group([
-    'before' => 'auth'
-], function () {
-    Route::get('/', 'AlbumController@index');
+Route::get('users/logout', [
+    'as' => 'users.logout',
+    'uses' => 'AuthController@logout'
+]);
 
-    Route::get('users/logout', [
-        'as' => 'users.logout',
-        'uses' => 'AuthController@logout'
-    ]);
+Route::get('/', 'AlbumController@index');
 
-    Route::any('albums/{albumId}/privacy', [
-        'as' => 'albums.api.privacy',
-        'uses' => 'AlbumController@togglePublic'
-    ]);
+Route::any('albums/{albumId}/privacy', [
+    'as' => 'albums.api.privacy',
+    'uses' => 'AlbumController@togglePublic'
+]);
 
-    Route::any('albums/{albumId}/settings', [
-        'as' => 'albums.api.settings',
-        'uses' => 'AlbumController@albumSettings'
-    ]);
+Route::any('albums/{albumId}/settings', [
+    'as' => 'albums.api.settings',
+    'uses' => 'AlbumController@albumSettings'
+]);
 
-    Route::any('albums/{albumId}/photos/{photoId}/settings', [
-        'as' => 'albums.photos.api.settings',
-        'uses' => 'PhotoController@photoSettings'
-    ]);
+Route::any('albums/{albumId}/photos/{photoId}/settings', [
+    'as' => 'albums.photos.api.settings',
+    'uses' => 'PhotoController@photoSettings'
+]);
 
-    Route::get('albums/{albumId}/photos/{photoId}/rotate/{dir}', [
-        'as' => 'albums.photos.api.rotate',
-        'uses' => 'PhotoController@photoRotate'
-    ]);
+Route::get('albums/{albumId}/photos/{photoId}/rotate/{dir}', [
+    'as' => 'albums.photos.api.rotate',
+    'uses' => 'PhotoController@photoRotate'
+]);
 
-    Route::any('albums/{albumId}/photos/{photoId}/watermark/image', [
-        'as' => 'albums.photos.api.textWatermark',
-        'uses' => 'PhotoController@photoWatermark'
-    ]);
+Route::any('albums/{albumId}/photos/{photoId}/watermark/image', [
+    'as' => 'albums.photos.api.textWatermark',
+    'uses' => 'PhotoController@photoWatermark'
+]);
 
-    Route::resource('albums.photos', 'PhotoController');
-    Route::resource('albums', 'AlbumController');
-});
+Route::resource('albums.photos', 'PhotoController');
+Route::resource('albums', 'AlbumController');

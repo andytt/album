@@ -19,6 +19,10 @@ class PhotoController extends \BaseController
         $this->albumRepository = $albumRepository;
         $this->photoRepository = $photoRepository;
         $this->notifierRepository = $notifierRepository;
+
+        $this->beforeFilter('auth', [
+            'except' => ['show']
+        ]);
     }
 
     /**
@@ -91,7 +95,14 @@ class PhotoController extends \BaseController
 
         $album = $this->albumRepository->findOrNew($albumId);
 
-        if (!$this->albumRepository->canUserRead(Auth::user(), $album)) {
+        // Redirect or Reject if
+        // album is not public
+        // and currently logged in user can't access.
+        if (
+            !$this->albumRepository->isPublic($album)
+            && Auth::check()
+            && !$this->albumRepository->canUserRead(Auth::user(), $album)
+        ) {
             if (Request::ajax()) return Response::json(null, 403);
             else return Redirect::route('albums.index');
         }
@@ -102,7 +113,14 @@ class PhotoController extends \BaseController
             return Image::make(storage_path('images') . '/' . $photo->getAttribute('file_id'))->response();
         }
 
-        $isAlbumCreator = $this->albumRepository->canUserUpdate(Auth::user(), $album);
+        $isAlbumCreator = (
+            Auth::check()
+            && $this->albumRepository->canUserUpdate(Auth::user(), $album)
+        );
+
+        if (Request::ajax()) {
+            return View::make('components.photoShow')->with(compact('album', 'photo', 'isAlbumCreator'));
+        }
 
         return View::make('layouts.photoShow')->with(compact('album', 'photo', 'isAlbumCreator'));
     }

@@ -95,4 +95,9 @@ class AlbumRepository implements AlbumRepositoryInterface
 
         return true;
     }
+
+    public function isPublic(Album $album)
+    {
+        return $album->getPrivacy();
+    }
 }
