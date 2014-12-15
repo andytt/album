@@ -3,6 +3,7 @@
 @section('styles')
 
 {{-- */ $backgroundImages = ['sunset', 'sunsetSky', 'sky']; /* --}}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.nanoscroller/0.8.4/css/nanoscroller.css">
 
 <style>
     .container-fluid {
@@ -37,6 +38,10 @@
         display: table-cell;
         vertical-align: middle;
     }
+
+    .nano > .nano-content {
+        padding-right: 20px;
+    }
 </style>
 
 @stop
@@ -45,22 +50,65 @@
 
 <div id="container">
     <div id="form-signup-container">
-        <div class="col-xs-12 text-center">
-            <h1 id="title-banner">Gallery</h1>
+        <div class="col-xs-12 col-md-7">
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <h1 id="title-banner">Gallery</h1>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <h3 id="subtitle-banner">Discover The Prettiest ;)</h3>
+                </div>
+                <div class="col-xs-12"><br /></div>
+                <div class="col-xs-12"><br /></div>
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    @if (strpos(Route::currentRouteAction(), 'create') !== false)
+                        @include('components.signup')
+                    @else
+                        @include('components.signin')
+                    @endif
+                </div>
+            </div>
         </div>
-        <div class="col-xs-12 text-center">
-            <h3 id="subtitle-banner">Discover The Prettiest ;)</h3>
-        </div>
-        <div class="col-xs-12"><br /></div>
-        <div class="col-xs-12"><br /></div>
-        <div class="col-xs-12 col-md-4 col-md-offset-4">
-            @if (strpos(Route::currentRouteAction(), 'create') !== false)
-                @include('components.signup')
-            @else
-                @include('components.signin')
-            @endif
+        <div class="hidden-xs hidden-sm col-md-4">
+            <div class="row">
+                <div class="col-xs-12 nano">
+                    <div class="guest-photo-container nano-content"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+@stop
+
+@section('scripts')
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.nanoscroller/0.8.4/javascripts/jquery.nanoscroller.min.js"></script>
+
+<script>
+    var pusher = new Pusher('{{ $_ENV['PUSHER_APP_KEY'] }}');
+    var channel = pusher.subscribe('photos');
+    var $photoContainer = $('.guest-photo-container');
+
+    channel.bind('create', function (data) {
+        $.get(data.url, function (rep) {
+            $photoContainer.prepend(rep);
+
+            $('.thumbnail').find('a').colorbox({
+                rel: 'realtime',
+                closeButton: false,
+                photo: true,
+                maxWidth: '99%',
+                maxHeight: '99%'
+            });
+        });
+    });
+
+    $(function () {
+        $('.nano').css('height', $(document).height() * 0.7).nanoScroller({
+            iOSNativeScrolling: true,
+            preventPageScrolling: true
+        });
+    });
+</script>
 @stop
